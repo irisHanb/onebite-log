@@ -3,16 +3,23 @@ import { Input } from "@/components/ui/input";
 import { useSignInWithPassword } from "@/hooks/mutations/use-sign-in-with-password";
 import { useState } from "react";
 import { Link } from "react-router";
+import gitHubLogo from "@/assets/github-mark.svg";
+import { useSignInWithOAuth } from "@/hooks/mutations/use-sign-in-with-oauth";
 
 export default function SignInPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { mutate: signIn } = useSignInWithPassword();
+  const { mutate: signInWithPassword } = useSignInWithPassword();
+  const { mutate: signInWithOAuth } = useSignInWithOAuth();
 
   const handleSignInClick = () => {
     if (email.trim() === "" || password.trim() === "") return;
-    signIn({ email, password });
+    signInWithPassword({ email, password });
+  };
+
+  const handleSignInGitHubClick = () => {
+    signInWithOAuth("github");
   };
 
   return (
@@ -34,9 +41,17 @@ export default function SignInPage() {
           onChange={(e) => setPassword(e.target.value)}
         />
       </div>
-      <div>
+      <div className="flex flex-col gap-2">
         <Button className="w-full" onClick={handleSignInClick}>
           로그인
+        </Button>
+        <Button
+          className="w-full"
+          variant={"outline"}
+          onClick={handleSignInGitHubClick}
+        >
+          <img src={gitHubLogo} alt="GitHub Logo" className="h-4 w-4" />
+          GitHub 계정으로 로그인
         </Button>
       </div>
       <div>
