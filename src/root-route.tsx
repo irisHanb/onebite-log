@@ -6,7 +6,7 @@ import SignUpPage from "./pages/sign-up-page";
 import IndexPage from "./pages/index-page";
 import ProfileDetailPage from "./pages/profile-detail-page";
 import ResetPasswordPage from "./pages/reset-password-page";
-import GlobalLayout from "./components/ui/layout/global-layout";
+import GlobalLayout from "./components/layout/global-layout";
 
 export default function RootRoute() {
   return (
