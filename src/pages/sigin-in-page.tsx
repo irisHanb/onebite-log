@@ -6,20 +6,31 @@ import { Link } from "react-router";
 import gitHubLogo from "@/assets/github-mark.svg";
 import { useSignInWithOAuth } from "@/hooks/mutations/use-sign-in-with-oauth";
 import { toast } from "sonner";
+import { generateErrorMessage } from "@/lib/error";
 
 export default function SignInPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { mutate: signInWithPassword } = useSignInWithPassword({
-    onError: (error) => {
-      toast.error(error.message, {
-        position: "top-center",
-      });
-      setPassword("");
-    },
-  });
-  const { mutate: signInWithOAuth } = useSignInWithOAuth();
+  const { mutate: signInWithPassword, isPending: isSignInWithPasswordPending } =
+    useSignInWithPassword({
+      onError: (error) => {
+        const message = generateErrorMessage(error);
+        toast.error(message, {
+          position: "top-center",
+        });
+        setPassword("");
+      },
+    });
+  const { mutate: signInWithOAuth, isPending: isSignInWithOAuthPending } =
+    useSignInWithOAuth({
+      onError: (error) => {
+        const message = generateErrorMessage(error.message);
+        toast.error(message, {
+          position: "top-center",
+        });
+      },
+    });
 
   const handleSignInClick = () => {
     if (email.trim() === "" || password.trim() === "") return;
@@ -30,6 +41,8 @@ export default function SignInPage() {
     signInWithOAuth("github");
   };
 
+  const isPending = isSignInWithPasswordPending || isSignInWithOAuthPending;
+
   return (
     <div className="flex flex-col gap-8">
       <div className="text-xl font-bold">로그인</div>
@@ -39,6 +52,7 @@ export default function SignInPage() {
           type="email"
           placeholder="example@abc.com"
           value={email}
+          disabled={isPending}
           onChange={(e) => setEmail(e.target.value)}
         />
         <Input
@@ -46,16 +60,22 @@ export default function SignInPage() {
           type="password"
           placeholder="password"
           value={password}
+          disabled={isPending}
           onChange={(e) => setPassword(e.target.value)}
         />
       </div>
       <div className="flex flex-col gap-2">
-        <Button className="w-full" onClick={handleSignInClick}>
+        <Button
+          className="w-full"
+          onClick={handleSignInClick}
+          disabled={isPending}
+        >
           로그인
         </Button>
         <Button
           className="w-full"
           variant={"outline"}
+          disabled={isPending}
           onClick={handleSignInGitHubClick}
         >
           <img src={gitHubLogo} alt="GitHub Logo" className="h-4 w-4" />
