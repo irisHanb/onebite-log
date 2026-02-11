@@ -56,6 +56,7 @@ export default function PostEditorModal() {
     setImages((preImages) =>
       preImages.filter((item) => item.previewUrl !== image.previewUrl),
     );
+    URL.revokeObjectURL(image.previewUrl);
   };
 
   const handleCloseModal = () => {
@@ -92,7 +93,12 @@ export default function PostEditorModal() {
 
   /* 편의기능: modal 열릴때 textarea 로 자동 포커싱과 내용초기화 */
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen) {
+      images.forEach((image) => {
+        URL.revokeObjectURL(image.previewUrl);
+      });
+      return;
+    }
     textareaRef.current?.focus();
     setContent("");
     setImages([]);
