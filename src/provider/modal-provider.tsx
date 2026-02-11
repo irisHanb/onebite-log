@@ -1,3 +1,4 @@
+import AlertModal from "@/components/modal/alert-modal";
 import PostEditorModal from "@/components/modal/post-editor-modal";
 import { createPortal } from "react-dom";
 
@@ -9,7 +10,10 @@ export default function ModalProvider({
   return (
     <>
       {createPortal(
-        <PostEditorModal />,
+        <>
+          <PostEditorModal />
+          <AlertModal />
+        </>,
         document.getElementById("modal-root")!,
       )}
       {children}
