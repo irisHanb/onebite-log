@@ -25,5 +25,7 @@ export const useInfinitePostData = () => {
       if (lastPage.length < PAGE_SIZE) return undefined;
       return allPages.length;
     },
+
+    staleTime: Infinity,
   });
 };
