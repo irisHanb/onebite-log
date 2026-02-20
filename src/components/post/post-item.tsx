@@ -7,7 +7,7 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import { foramtTimeAgo } from "@/lib/time";
-import EditPostItemButton from "./edit-post-item-button";
+import EditPostButton from "./edit-post-button";
 import DeletePostButton from "./delete-post-button";
 
 export default function PostItem(post: Post) {
@@ -34,7 +34,7 @@ export default function PostItem(post: Post) {
 
         {/* 1-2. 수정/삭제 버튼 */}
         <div className="text-muted-foreground flex text-sm">
-          <EditPostItemButton {...post} />
+          <EditPostButton {...post} />
           <DeletePostButton id={post.id} />
         </div>
       </div>
