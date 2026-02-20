@@ -102,6 +102,7 @@ export default function PostEditorModal() {
         content,
       });
     }
+    postEditorModal.actions.close();
   };
 
   /* 편의기능: post 내용의 길이에 맞게 modal height 조정 */
