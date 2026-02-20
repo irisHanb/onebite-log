@@ -1,4 +1,4 @@
-import { HeartIcon, MessageCircle } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 import defaultAvatar from "@/assets/default-avatar.png";
 import {
   Carousel,
@@ -12,6 +12,7 @@ import { useSession } from "@/store/session";
 import { usePostByIdData } from "@/hooks/queries/use-post-by-id-data";
 import Loader from "./loader";
 import Fallback from "../fallback";
+import LikePostButton from "./like-post-button";
 
 export default function PostItem({ postId }: { postId: number }) {
   const session = useSession();
@@ -86,10 +87,7 @@ export default function PostItem({ postId }: { postId: number }) {
       {/* 3. 좋아요, 댓글 버튼 */}
       <div className="flex gap-2">
         {/* 3-1. 좋아요 버튼 */}
-        <div className="hover:bg-muted flex cursor-pointer items-center gap-2 rounded-xl border-1 p-2 px-4 text-sm">
-          <HeartIcon className="h-4 w-4" />
-          <span>0</span>
-        </div>
+        <LikePostButton id={post.id} likeCount={post.like_count} />
 
         {/* 3-2. 댓글 버튼 */}
         <div className="hover:bg-muted flex cursor-pointer items-center gap-2 rounded-xl border-1 p-2 px-4 text-sm">
