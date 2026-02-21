@@ -1,6 +1,14 @@
 import supabase from "@/lib/supabase";
 import type { Provider } from "@supabase/supabase-js";
 
+export async function signOut() {
+  const { error } = await supabase.auth.signOut();
+  // 서버 실패시에도 어떻게든 로그아웃 실현
+  if (error) {
+    await supabase.auth.signOut({ scope: "local" });
+  }
+}
+
 export async function signUp({
   email,
   password,
