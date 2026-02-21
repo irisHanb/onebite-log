@@ -14,7 +14,7 @@ export const useUpdateProfile = (callbacks?: UseMutationCallback) => {
         QUERY_KEYS.profile.byId(updatedProfile.id),
         updatedProfile,
       );
-      queryClient.resetQueries({
+      queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.post.userList(updatedProfile.id),
       });
     },
