@@ -5,17 +5,36 @@ import { foramtTimeAgo } from "@/lib/time";
 import { useSession } from "@/store/session";
 import { useState } from "react";
 import CommentEditor from "./comment-editor";
-import { useUpdateComment } from "@/hooks/mutations/comment/use-update-comment";
+import { useDeleteComment } from "@/hooks/mutations/comment/use-delete-comment";
+import { toast } from "sonner";
+import { useOpenAlertModal } from "@/store/alert-modal";
 
 export default function CommentItem(comment: Comment) {
   const { id, content, author, created_at, post_id: postId } = comment;
   const [isEditing, setIsEditing] = useState(false);
+  const openAlertModal = useOpenAlertModal();
 
   const session = useSession();
   const isMine = session?.user.id === author.id;
 
+  const { mutate: deleteComment, isPending: isPendingDeleteComment } =
+    useDeleteComment({
+      onError: (error) => {
+        toast.error("댓글 삭제에 실패했습니다.", { position: "top-center" });
+      },
+    });
+
   const toggleIsEditing = () => {
     setIsEditing(!isEditing);
+  };
+
+  const handleDeleteClick = () => {
+    openAlertModal({
+      title: "댓글 삭제",
+      description:
+        "삭제된 댓글은 되돌릴 수 없습니다. 정말 이 댓글을 삭제하시겠습니까?",
+      onPositive: () => deleteComment(id),
+    });
   };
 
   return (
@@ -60,7 +79,12 @@ export default function CommentItem(comment: Comment) {
                     수정
                   </div>
                   <div className="bg-border h-[13px] w-[2px]"></div>
-                  <div className="cursor-pointer hover:underline">삭제</div>
+                  <div
+                    className="cursor-pointer hover:underline"
+                    onClick={handleDeleteClick}
+                  >
+                    삭제
+                  </div>
                 </>
               )}
             </div>

@@ -1,4 +1,4 @@
-import { useCommentsData } from "@/hooks/mutations/comment/use-comments-data";
+import { useCommentsData } from "@/hooks/queries/use-comments-data";
 import CommentItem from "./comment-item";
 import Fallback from "../fallback";
 import Loader from "../post/loader";
