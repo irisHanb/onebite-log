@@ -3,25 +3,16 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/popover";
+import { useSetTheme, useTheme } from "@/store/theme";
 import type { Theme } from "@/types";
 import { PopoverClose } from "@radix-ui/react-popover";
-import { SunIcon } from "lucide-react";
+import { CheckIcon, SunIcon } from "lucide-react";
 
 const THEME: Theme[] = ["system", "light", "dark"];
 
 export default function ThemeButton() {
-  const onChangeTheme = (theme: Theme) => {
-    const htmlTag = document.documentElement;
-    htmlTag.classList.remove("dark", "light");
-    if (theme === "system") {
-      const isDarkTheme = window.matchMedia(
-        "(prefers-color-scheme: dark)",
-      ).matches;
-      htmlTag.classList.add(isDarkTheme ? "dark" : "light");
-    } else {
-      htmlTag.classList.add(theme);
-    }
-  };
+  const currentTheme = useTheme();
+  const setTheme = useSetTheme();
 
   return (
     <div className="hover:bg-muted cursor-pointer rounded-full p-2">
@@ -33,10 +24,11 @@ export default function ThemeButton() {
           {THEME.map((theme) => (
             <PopoverClose key={`theme-button-${theme}`} asChild>
               <div
-                className="hover:bg-muted cursor-pointer p-3"
-                onClick={() => onChangeTheme(theme)}
+                className="hover:bg-muted ursor-pointer flex items-center justify-between p-3"
+                onClick={() => setTheme(theme)}
               >
                 {theme}
+                {currentTheme === theme && <CheckIcon className="h-4 w-4" />}
               </div>
             </PopoverClose>
           ))}
