@@ -16,6 +16,7 @@ export default function CommentItem(comment: NestedComment) {
     author,
     created_at,
     post_id: postId,
+    root_comment_id: rootCommentId,
     children,
   } = comment;
   const [isEditing, setIsEditing] = useState(false);
@@ -49,6 +50,7 @@ export default function CommentItem(comment: NestedComment) {
 
   const isMine = session?.user.id === author.id;
   const isRootComment = comment.parentComment === undefined;
+  const isOver2Level = comment.root_comment_id !== comment.parent_comment_id;
 
   return (
     <div
@@ -74,7 +76,14 @@ export default function CommentItem(comment: NestedComment) {
               onClose={toggleIsEditing}
             />
           ) : (
-            <div>{content}</div>
+            <div>
+              {isOver2Level && (
+                <span className="font-bold text-blue-500">
+                  @{comment.parentComment?.author.nickname}&nbsp;
+                </span>
+              )}
+              {content}
+            </div>
           )}
 
           <div className="text-muted-foreground flex justify-between text-sm">
@@ -116,6 +125,7 @@ export default function CommentItem(comment: NestedComment) {
           type="REPLY"
           postId={postId}
           parentCommentId={id}
+          rootCommentId={rootCommentId || id}
           onClose={toggleIsReply}
         />
       )}

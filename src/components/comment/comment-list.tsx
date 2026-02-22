@@ -8,17 +8,20 @@ function toNestedComments(comments: Comment[]): NestedComment[] {
   const results: NestedComment[] = [];
 
   comments.forEach((comment) => {
-    if (comment.parent_comment_id) {
-      // 대댓글, 즉, 이미 있는 댓글의 대댓글 이므로 results 리스트에서 찾으면 된다.
-      const parentCommentIndex = results.findIndex(
+    // root comment 밑으로 다 넣어준다.
+    if (comment.root_comment_id) {
+      const rootCommentIndex = results.findIndex(
+        (item) => item.id === comment.root_comment_id,
+      );
+
+      const parentComment = comments.find(
         (item) => item.id === comment.parent_comment_id,
       );
 
-      // 결과값의 parent 에 현재 comment 를 children 으로 넣어준다.
-      results[parentCommentIndex].children.push({
+      results[rootCommentIndex].children.push({
         ...comment,
         children: [],
-        parentComment: results[parentCommentIndex],
+        parentComment,
       });
     } else {
       results.push({ ...comment, children: [] });
