@@ -11,6 +11,8 @@ export type NestedComment = Comment & {
   children: NestedComment[];
 };
 
+export type Theme = "system" | "light" | "dark";
+
 export type UseMutationCallback = {
   onSuccess?: () => void;
   onError?: (error: Error) => void;
