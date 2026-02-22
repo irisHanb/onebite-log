@@ -18,10 +18,14 @@ export async function createComment({
   postId: number;
   content: string;
 }) {
-  const { data, error } = await supabase.from("comment").insert({
-    post_id: postId,
-    content,
-  });
+  const { data, error } = await supabase
+    .from("comment")
+    .insert({
+      post_id: postId,
+      content,
+    })
+    .select()
+    .single();
 
   if (error) throw error;
   return data;
